@@ -3,6 +3,7 @@ package com.rizon.youtube;
 import com.rizon.youtube.bussinesobject.DownloadPageBO;
 import com.rizon.youtube.bussinesobject.ResultPageBO;
 import com.rizon.youtube.bussinesobject.MainPageBO;
+import com.rizon.youtube.exceptions.NoResultFoundException;
 import com.rizon.youtube.listener.CustomTestListener;
 import com.rizon.youtube.model.VideoModel;
 import com.rizon.youtube.utils.Parser;
@@ -15,14 +16,13 @@ import java.util.Iterator;
 @Listeners(CustomTestListener.class)
 public class DownloadTest {
 
-    @Test(dataProvider = "dataO", threadPoolSize = 2)
+    @Test(dataProvider = "dataO", threadPoolSize = 3)
     public void test(String name) {
         MainPageBO youtubeMainPageBO = new MainPageBO();
         ResultPageBO resultPageBO = new ResultPageBO();
         DownloadPageBO downloadPageBO = new DownloadPageBO();
         Assert.assertTrue(youtubeMainPageBO.isSearchSuccess(name));
-        //Assert.assertNotNull(resultPageBO.getVideoURLForDownload());
-        // Assert.assertTrue(true);
+        Assert.assertTrue(resultPageBO.getVideoURLForDownload());
 
     }
 
@@ -41,6 +41,6 @@ public class DownloadTest {
 
     @AfterTest
     public void close() {
-        //WebDriverPool.quit();
+        WebDriverPool.quit();
     }
 }

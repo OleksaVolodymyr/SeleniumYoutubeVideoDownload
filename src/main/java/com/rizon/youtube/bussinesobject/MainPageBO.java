@@ -11,6 +11,6 @@ public class MainPageBO {
 
     public boolean isSearchSuccess(String searchRequest) {
         youtubeMainPage.enterNameAndSearch(searchRequest);
-        return youtubeMainPage.isSearchSuccess(searchRequest);
+        return youtubeMainPage.countOfRecords().matches("About (\\d+,\\d+|\\d+,\\d+,\\d+) .+");
     }
 }
