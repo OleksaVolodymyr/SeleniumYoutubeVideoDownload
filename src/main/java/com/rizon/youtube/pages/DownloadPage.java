@@ -18,19 +18,11 @@ public class DownloadPage extends PageObject {
     @FindBy(xpath = XPATH_DOWNLOAD_BUTTON)
     private Button donwloadButton;
 
-    public boolean dowloadVideo(String url) {
+    public void dowloadVideo(String url) {
         driver.navigate().to(url);
         new WebDriverWait(driver, 30)
-                .until(new ExpectedCondition<Boolean>() {
-
-                    @Nullable
-                    @Override
-                    public Boolean apply(@Nullable WebDriver driver) {
-                        return driver.findElement(By.xpath(XPATH_DOWNLOAD_BUTTON)).isDisplayed() &&
-                                driver.findElement(By.xpath(XPATH_DOWNLOAD_BUTTON)).isEnabled();
-                    }
-                });
+                .until((ExpectedCondition<Boolean>) driver -> driver.findElement(By.xpath(XPATH_DOWNLOAD_BUTTON))
+                        .isDisplayed() && driver.findElement(By.xpath(XPATH_DOWNLOAD_BUTTON)).isEnabled());
         donwloadButton.click();
-        return true;
     }
 }

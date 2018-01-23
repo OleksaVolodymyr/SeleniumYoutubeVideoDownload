@@ -9,8 +9,11 @@ public class MainPageBO {
         youtubeMainPage = new MainPage();
     }
 
-    public boolean isSearchSuccess(String searchRequest) {
+    public void enterRequestAndSearch(String searchRequest) {
         youtubeMainPage.enterNameAndSearch(searchRequest);
+    }
+
+    public boolean isSearchSuccess() {
         return youtubeMainPage.countOfRecords().matches("About (\\d+,\\d+|\\d+,\\d+,\\d+) .+");
     }
 }

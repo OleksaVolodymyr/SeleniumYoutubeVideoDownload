@@ -1,28 +1,30 @@
 package com.rizon.youtube;
 
 import com.rizon.youtube.bussinesobject.DownloadPageBO;
-import com.rizon.youtube.bussinesobject.ResultPageBO;
 import com.rizon.youtube.bussinesobject.MainPageBO;
-import com.rizon.youtube.exceptions.NoResultFoundException;
+import com.rizon.youtube.bussinesobject.ResultPageBO;
 import com.rizon.youtube.listener.CustomTestListener;
-import com.rizon.youtube.model.VideoModel;
-import com.rizon.youtube.utils.Parser;
 import com.rizon.youtube.utils.WebDriverPool;
 import org.testng.Assert;
-import org.testng.annotations.*;
-
-import java.util.Iterator;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
 
 @Listeners(CustomTestListener.class)
 public class DownloadTest {
 
-    @Test(dataProvider = "dataO", threadPoolSize = 3)
+    @Test(dataProvider = "dataO", threadPoolSize = 2)
     public void test(String name) {
         MainPageBO youtubeMainPageBO = new MainPageBO();
         ResultPageBO resultPageBO = new ResultPageBO();
         DownloadPageBO downloadPageBO = new DownloadPageBO();
-        Assert.assertTrue(youtubeMainPageBO.isSearchSuccess(name));
-        Assert.assertTrue(resultPageBO.getVideoURLForDownload());
+        youtubeMainPageBO.enterRequestAndSearch(name);
+        Assert.assertTrue(youtubeMainPageBO.isSearchSuccess());
+        resultPageBO.formatURLToDownload();
+        Assert.assertTrue(resultPageBO.isURLValid());
+        downloadPageBO.downloadVideo();
+        Assert.assertTrue(downloadPageBO.isVideoDownload());
 
     }
 
@@ -34,8 +36,9 @@ public class DownloadTest {
     @DataProvider(name = "dataO", parallel = true)
     public Object[][] getData() {
         return new Object[][]{
-                new Object[]{"Post Malone - rockstar ft. 21 Savage"},
-                new Object[]{"Pendulum - Witchcraft"}/*,
+                new Object[]{"Post Malone - rockstar ft. 21 Savage"}/*,
+                new Object[]{"Pendulum - Witchcraft"},
+                new Object[]{"warlords of draenor"}
                 new Object[]{"ajksdhahjsdadhsadlhjashjahdajlhsdjadhadsahdsjkahd"}*/};
     }
 

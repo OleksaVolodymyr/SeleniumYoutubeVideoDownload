@@ -17,28 +17,22 @@ import java.util.List;
 public class ResultPage extends PageObject {
 
     private static final String XPATH_VIDEO = "//h3//a[@id='video-title']";
-    private static Logger LOG = Logger.getLogger(ResultPage.class);
+    private static final String XPATH_CONTENT = "//div[@class='promo-title style-scope ytd-background-promo-renderer']";
+    //    private static Logger LOG = Logger.getLogger(ResultPage.class);
     @FindBy(xpath = XPATH_VIDEO)
     private List<Label> video;
 
-    public String getURLForDownload() throws NoResultFoundException {
-        new WebDriverWait(WebDriverPool.getInstance(), 10).until(new ExpectedCondition<Boolean>() {
-            @Nullable
-            @Override
-            public Boolean apply(@Nullable WebDriver driver) {
-                return ((JavascriptExecutor) driver).executeScript("return window.document.readyState")
-                        .equals("complete");
-            }
-        });
+    public String getURL() throws NoResultFoundException {
+        new WebDriverWait(WebDriverPool.getInstance(), 10)
+                .until((ExpectedCondition<Boolean>) driver ->  driver.findElement(By.xpath(XPATH_VIDEO)).getAttribute("title")
+                        .contains("Post Malone - rockstar ft. 21 Savage"));
         Boolean checkElementPresent = WebDriverPool.getInstance()
-                .findElements(By.xpath("//div[@class='promo-title style-scope ytd-background-promo-renderer']"))
+                .findElements(By.xpath(XPATH_CONTENT))
                 .size() > 0;
         if (checkElementPresent) {
-            //return null;
-            throw new NoResultFoundException("No result");
+            throw new NoResultFoundException("No result found");
         }
         String url = video.get(0).getAttribute("href");
-        //LOG.info(url.substring(0, url.indexOf(".") + 1) + "ss" + url.substring(url.indexOf(".") + 1, url.length()));
         return url.substring(0, url.indexOf(".") + 1) + "ss" + url.substring(url.indexOf(".") + 1, url.length());
 
     }
